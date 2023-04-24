@@ -33,14 +33,16 @@ public class AskService {
 
     public static final int maxLength = 200;
     public static final String REQUEST_MSG_APPEND = ", please answer above question and return at most 280 characters.";
+    public static final String SYSTEM_MESSAGE = "You are ChatGPT, a large language model trained by OpenAI. Follow the user\\'s instructions carefully. Returns a maximum of 280 characters.";
 
     public String ask(Map<String, String> map) {
         try {
             String q = map.get("Content");
             String from = map.get("FromUserName");
             q += REQUEST_MSG_APPEND;
+            Message systemMsg = Message.builder().role(Message.Role.SYSTEM).content(SYSTEM_MESSAGE).build();
             Message message = Message.builder().role(Message.Role.USER).content(q).build();
-            List<Message> msgList = Collections.singletonList(message);
+            List<Message> msgList = Arrays.asList(systemMsg, message);
             ChatCompletion chatCompletion = ChatCompletion.builder()
                     .maxTokens(maxLength)
                     //                .model(chatModel)
