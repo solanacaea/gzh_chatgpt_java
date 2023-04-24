@@ -33,7 +33,7 @@ public class AskService {
 
     public static final int maxLength = 200;
     public static final String REQUEST_MSG_APPEND = ", please answer above question and return at most 280 characters.";
-    public static final String SYSTEM_MESSAGE = "You are ChatGPT, a large language model trained by OpenAI. Follow the user\\'s instructions carefully. Returns a maximum of 280 characters.";
+    public static final String SYSTEM_MESSAGE = "你是胖达AI小助手，请回答用户问题，并且每次返回280个字符以内的内容。";
 
     public String ask(Map<String, String> map) {
         try {
