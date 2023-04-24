@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -48,11 +49,12 @@ public class AskController {
         }
     }
 
-    public void ask(PrintWriter out, HttpServletRequest request, HttpServletResponse response) {
+    public void ask(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
         Map<String, String> map = WechatMessageUtil.xmlToMap(request);
         logger.info("请求参数: " + map.toString());
         String msgType = map.get("MsgType");
-
         if (WechatMessageUtil.MESSAGE_EVENT.equals(msgType) &&
                 WechatMessageUtil.MESSAGE_EVENT_SUBSCRIBE.equals(map.get("Event"))) {
             String respText = wxService.processRequest(WELCOME_MSG, map);
@@ -102,7 +104,12 @@ public class AskController {
     @ResponseBody
     @RequestMapping(value = "/wx", method = RequestMethod.POST)
     public void wechatServicePost(PrintWriter out, HttpServletRequest request, HttpServletResponse response) {
-        ask(out, request, response);
+        try {
+            ask(request, response);
+        } catch (IOException e) {
+            out.print(SUCCESS);
+            out.flush();
+        }
     }
 
 }
