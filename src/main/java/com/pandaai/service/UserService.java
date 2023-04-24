@@ -1,7 +1,10 @@
 package com.pandaai.service;
 
+import org.springframework.stereotype.Service;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Service
 public class UserService {
 
     private static final String USER_USAGE_LIMIT_COUNT = "USER_USAGE_LIMIT_COUNT";

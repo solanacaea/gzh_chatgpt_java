@@ -1,11 +1,11 @@
-package com.wechat.service;
+package com.pandaai.wechat.service;
 
 import com.pandaai.util.WechatMessageUtil;
-import com.wechat.entity.vo.wechat.message.customer.CustomerMsgRequest;
-import com.wechat.entity.vo.wechat.message.customer.CustomerMsgResponse;
-import com.wechat.entity.vo.wechat.message.TextMessage;
-import com.wechat.entity.vo.wechat.message.customer.TextContent;
-import com.wechat.entity.vo.wechat.token.AccessToken;
+import com.pandaai.wechat.entity.vo.wechat.message.customer.CustomerMsgRequest;
+import com.pandaai.wechat.entity.vo.wechat.message.customer.CustomerMsgResponse;
+import com.pandaai.wechat.entity.vo.wechat.message.TextMessage;
+import com.pandaai.wechat.entity.vo.wechat.message.customer.TextContent;
+import com.pandaai.wechat.entity.vo.wechat.token.AccessToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

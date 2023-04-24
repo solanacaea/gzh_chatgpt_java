@@ -1,4 +1,4 @@
-package com.wechat.entity.vo.wechat.message;
+package com.pandaai.wechat.entity.vo.wechat.message;
 
 /**
  * @author gaowei.cheng

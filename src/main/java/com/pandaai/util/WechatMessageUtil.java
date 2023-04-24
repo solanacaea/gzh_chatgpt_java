@@ -1,7 +1,7 @@
 package com.pandaai.util;
 
 import com.thoughtworks.xstream.XStream;
-import com.wechat.entity.vo.wechat.message.TextMessage;
+import com.pandaai.wechat.entity.vo.wechat.message.TextMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.dom4j.Document;

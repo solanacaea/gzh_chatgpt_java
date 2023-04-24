@@ -2,7 +2,7 @@ package com.pandaai.controlller;
 
 import com.pandaai.service.AskService;
 import com.pandaai.service.UserService;
-import com.wechat.service.WechatService;
+import com.pandaai.wechat.service.WechatService;
 import com.pandaai.util.CheckUtil;
 import com.pandaai.util.WechatMessageUtil;
 import org.apache.commons.lang3.StringUtils;

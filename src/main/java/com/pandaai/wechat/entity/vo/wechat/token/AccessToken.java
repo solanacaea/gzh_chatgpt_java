@@ -1,4 +1,4 @@
-package com.wechat.entity.vo.wechat.token;
+package com.pandaai.wechat.entity.vo.wechat.token;
 
 import lombok.Data;
 import lombok.ToString;

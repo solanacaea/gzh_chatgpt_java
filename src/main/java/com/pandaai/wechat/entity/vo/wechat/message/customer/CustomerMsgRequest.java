@@ -1,4 +1,4 @@
-package com.wechat.entity.vo.wechat.message.customer;
+package com.pandaai.wechat.entity.vo.wechat.message.customer;
 
 public class CustomerMsgRequest {
     private String touser;

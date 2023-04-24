@@ -1,4 +1,4 @@
-package com.openai;
+package com.pandaai.openai;
 
 import com.unfbx.chatgpt.OpenAiClient;
 import com.unfbx.chatgpt.OpenAiStreamClient;

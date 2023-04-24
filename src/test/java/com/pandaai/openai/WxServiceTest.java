@@ -1,10 +1,10 @@
-package com.openai;
+package com.pandaai.openai;
 
 import com.pandaai.util.WechatMessageUtil;
-import com.wechat.entity.vo.wechat.message.customer.CustomerMsgRequest;
-import com.wechat.entity.vo.wechat.message.customer.CustomerMsgResponse;
-import com.wechat.entity.vo.wechat.message.customer.TextContent;
-import com.wechat.entity.vo.wechat.token.AccessToken;
+import com.pandaai.wechat.entity.vo.wechat.message.customer.CustomerMsgRequest;
+import com.pandaai.wechat.entity.vo.wechat.message.customer.CustomerMsgResponse;
+import com.pandaai.wechat.entity.vo.wechat.message.customer.TextContent;
+import com.pandaai.wechat.entity.vo.wechat.token.AccessToken;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
