@@ -9,9 +9,13 @@ wx_jszaz_app_id: 你的appid
 wx_jszaz_app_secret: 你的appsecret
 ```
 
-打包：```mvn package ```
+打包：```mvn package```
 
-启动: ```./start start ```
+脚本执行权限：```chmod 755 ./start.sh```
+
+启动: ```./start.sh start ```
+
+重启：```./start.sh restart```
 
 请求接口：http://localhost:8080/gzh/wx
 
@@ -29,8 +33,8 @@ wx_jszaz_app_secret: 你的appsecret
 1、开发者在5秒内未回复任何内容 2、开发者回复了异常数据，比如JSON数据等
 ```
 由于ChatGPT接口耗时一般超过5秒，所以先回复“success”，然后异步等待OpenAI API结果返回，再将结果推送给用户。
-AskController.java
-```
+### AskController.java
+```java
 String respText;
 try {
     userService.plus();
