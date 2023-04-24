@@ -13,7 +13,7 @@ wx_jszaz_app_secret: 你的appsecret
 
 脚本执行权限：```chmod 755 ./start.sh```
 
-启动: ```./start.sh start ```
+启动：```./start.sh start ```
 
 重启：```./start.sh restart```
 
