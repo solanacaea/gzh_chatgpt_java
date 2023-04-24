@@ -24,6 +24,7 @@ import static com.pandaai.util.AppConstants.WELCOME_MSG;
 @RestController
 @RequestMapping("/gzh")
 public class AskController {
+    private static final String SUCCESS = "success";
 
     @Autowired
     private AskService askService;
@@ -58,6 +59,11 @@ public class AskController {
             out.flush();
             return;
         }
+        if (!WechatMessageUtil.MESSAGE_TEXT.equals(msgType)) {
+            out.print(SUCCESS);
+            out.flush();
+            return;
+        }
 
         String overloaded = userService.checkUserDosage();
         if (overloaded != null) {
@@ -74,7 +80,7 @@ public class AskController {
                 askService.ask(map);
                 userService.minus();
             });
-            respText = "success";
+            respText = SUCCESS;
         } catch (Exception e) {
             respText = wxService.processRequest(ERROR_RESP_MSG, map);
         } finally {
