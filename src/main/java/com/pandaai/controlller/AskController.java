@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import static com.pandaai.util.AppConstants.ERROR_RESP_MSG;
+import static com.pandaai.util.AppConstants.WELCOME_MSG;
 
 
 @RestController
@@ -49,12 +50,20 @@ public class AskController {
     public void ask(PrintWriter out, HttpServletRequest request, HttpServletResponse response) {
         Map<String, String> map = WechatMessageUtil.xmlToMap(request);
         logger.info("请求参数: " + map.toString());
+        String msgType = map.get("MsgType");
+        if (msgType.equals("subscribe")) {
+            String respText = wxService.processRequest(WELCOME_MSG, map);
+            out.print(respText);
+            out.flush();
+            return;
+        }
 
         String overloaded = userService.checkUserDosage();
         if (overloaded != null) {
             String respText = wxService.processRequest(overloaded, map);
             out.print(respText);
             out.flush();
+            return;
         }
 
         String respText;

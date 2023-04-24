@@ -12,4 +12,5 @@ public interface AppConstants {
     DateFormat DF_yyyyMMdd = new SimpleDateFormat("yyyyMMdd");
     String LIMIT_CONFIG_TYPE = "USAGE_LIMIT";
     String ERROR_RESP_MSG = "暂时无法回答，请稍后再试。";
+    String WELCOME_MSG = "欢迎关注！";
 }
