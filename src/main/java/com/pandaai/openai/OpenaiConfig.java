@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class OpenaiConfig {
 
-    public static final long timeoutConn = 5;
-    public static final long timeout = 12L;
+    public static final long timeoutConn = 10;
+    public static final long timeout = 30L;
 
     @Value("${openai.api-key1}")
     private String apiKey1;

@@ -32,7 +32,7 @@ public class AskService {
     private WechatService wxService;
 
     public static final int maxLength = 200;
-    public static final String REQUEST_MSG_APPEND = " 请回答以上内容，并且返回最多280个字符。";
+    public static final String REQUEST_MSG_APPEND = ", 请回答以上内容，并且返回最多280个字符。";
 
     public String ask(Map<String, String> map) {
         try {
