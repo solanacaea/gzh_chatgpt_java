@@ -45,7 +45,7 @@ public class AskService {
             List<Message> msgList = Arrays.asList(systemMsg, message);
             ChatCompletion chatCompletion = ChatCompletion.builder()
                     .maxTokens(maxLength)
-                    //                .model(chatModel)
+                    .model(chatModel)
                     .messages(msgList)
                     .user(from)
                     .build();

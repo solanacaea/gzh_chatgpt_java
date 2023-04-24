@@ -28,9 +28,6 @@ public class OpenaiConfig {
     @Value("${openai.api-key3}")
     private String apiKey3;
 
-    @Value("${openai.model.chat}")
-    private String chatModel;
-
     @Bean
     public OpenAiClient init() {
         //国内访问需要做代理，国外服务器不需要
