@@ -51,7 +51,8 @@ public class AskController {
         Map<String, String> map = WechatMessageUtil.xmlToMap(request);
         logger.info("请求参数: " + map.toString());
         String msgType = map.get("MsgType");
-        if (msgType.equals("subscribe")) {
+        if (WechatMessageUtil.MESSAGE_EVENT.equals(msgType) &&
+                WechatMessageUtil.MESSAGE_EVENT_SUBSCRIBE.equals(map.get("Event"))) {
             String respText = wxService.processRequest(WELCOME_MSG, map);
             out.print(respText);
             out.flush();
