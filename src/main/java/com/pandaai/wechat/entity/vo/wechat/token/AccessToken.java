@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-@ToString
+@ToString(exclude = { "access_token" })
 public class AccessToken {
     private String errcode;
     private String errmsg;

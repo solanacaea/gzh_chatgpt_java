@@ -74,10 +74,10 @@ public class WechatService {
         param.put("appid", appId);
         param.put("secret", appSec);
         param.put("force_refresh", true);
-        log.info("WechatService.obtainAccessToken ...");
 
         AccessToken result = new RestTemplate().postForObject(url, param, AccessToken.class);
         assert result != null;
+        log.info("WechatService.obtainAccessToken: {} ...", result);
         return result.getAccess_token();
     }
 
