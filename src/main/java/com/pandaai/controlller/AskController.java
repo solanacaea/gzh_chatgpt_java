@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import static com.pandaai.util.AppConstants.ERROR_RESP_MSG;
 
@@ -46,7 +47,6 @@ public class AskController {
     }
 
     public void ask(PrintWriter out, HttpServletRequest request, HttpServletResponse response) {
-        logger.info("请求: " + request);
         Map<String, String> map = WechatMessageUtil.xmlToMap(request);
         logger.info("请求参数: " + map.toString());
 
@@ -59,18 +59,16 @@ public class AskController {
 
         String respText;
         try {
-            int currReq = userService.plus();
-            String resp = askService.ask(map);
-            if (StringUtils.equals("", resp)) {
-                respText = "success";
-            } else {
-                respText = wxService.processRequest(resp, map);
-            }
+            userService.plus();
+            CompletableFuture.runAsync(() -> {
+                askService.ask(map);
+                userService.minus();
+            });
+            respText = "success";
         } catch (Exception e) {
             respText = wxService.processRequest(ERROR_RESP_MSG, map);
         } finally {
-            int currReq = userService.minus();
-            logger.info("当前并行请求数量：" + currReq);
+            logger.info("当前并行请求数量：" + userService.get());
         }
         out.print(respText);
         out.flush();

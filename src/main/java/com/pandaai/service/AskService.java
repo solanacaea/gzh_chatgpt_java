@@ -51,11 +51,8 @@ public class AskService {
             logger.info(response.toString());
             ChatChoice result = response.getChoices().get(0);
             String respText = result.getMessage().getContent();
-            long timeCost = (System.currentTimeMillis() / 1000 - response.getCreated());
-            if (timeCost > 3) {
-                push2User(map, respText);
-                return "";
-            }
+//            long timeCost = (System.currentTimeMillis() / 1000 - response.getCreated());
+            push2User(map, respText);
             return respText;
         } catch (Exception e) {
             logger.error("ask异常："+ ExceptionUtils.getStackTrace(e));
