@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -73,6 +74,7 @@ public class WechatService {
         param.put("appid", appId);
         param.put("secret", appSec);
         param.put("force_refresh", true);
+        log.info("WechatService.obtainAccessToken ...");
 
         AccessToken result = new RestTemplate().postForObject(url, param, AccessToken.class);
         assert result != null;
@@ -93,6 +95,10 @@ public class WechatService {
             CustomerMsgResponse response = restTemplate.postForObject(
                     url, message, CustomerMsgResponse.class);
             assert response != null;
+            if (response.getErrcode() == 40001) {
+                cacheEvict();
+                url = serverHost + sendUrl + obtainAccessToken();
+            }
             log.info("发送客服消息返回信息:" + response.toString());
             if(response.getErrcode() == 0) { //发送成功-退出循环发送
                 i = 4;
@@ -104,5 +110,9 @@ public class WechatService {
         return false;
     }
 
+    @CacheEvict(allEntries = true)
+    public void cacheEvict() {
+        log.info("cacheEvict cacheNames: {} ...", CACHE_NAME);
+    }
 
 }
