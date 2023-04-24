@@ -34,22 +34,14 @@ public class WechatService {
         String fromUserName = map.get("FromUserName");
         // 开发者微信号
         String toUserName = map.get("ToUserName");
-        // 消息类型
-        String msgType = map.get("MsgType");
-        // 默认回复一个"success"
-        String responseMessage = "success";
         // 对消息进行处理
-        if (WechatMessageUtil.MESSAGE_TEXT.equals(msgType)) {// 文本消息
-            TextMessage textMessage = new TextMessage();
-            textMessage.setMsgType(WechatMessageUtil.MESSAGE_TEXT);
-            textMessage.setToUserName(fromUserName);
-            textMessage.setFromUserName(toUserName);
-            textMessage.setCreateTime(System.currentTimeMillis());
-            textMessage.setContent(message);
-            responseMessage = WechatMessageUtil.textMessageToXml(textMessage);
-        }
-        log.info(responseMessage);
-        return responseMessage;
+        TextMessage textMessage = new TextMessage();
+        textMessage.setMsgType(WechatMessageUtil.MESSAGE_TEXT);
+        textMessage.setToUserName(fromUserName);
+        textMessage.setFromUserName(toUserName);
+        textMessage.setCreateTime(System.currentTimeMillis());
+        textMessage.setContent(message);
+        return WechatMessageUtil.textMessageToXml(textMessage);
     }
 
     public boolean send2User(String openid, String result) {
