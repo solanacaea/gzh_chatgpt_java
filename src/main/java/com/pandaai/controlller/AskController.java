@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -50,7 +51,6 @@ public class AskController {
     }
 
     public void ask(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         Map<String, String> map = WechatMessageUtil.xmlToMap(request);
         logger.info("请求参数: " + map.toString());
@@ -58,6 +58,7 @@ public class AskController {
         if (WechatMessageUtil.MESSAGE_EVENT.equals(msgType) &&
                 WechatMessageUtil.MESSAGE_EVENT_SUBSCRIBE.equals(map.get("Event"))) {
             String respText = wxService.processRequest(WELCOME_MSG, map);
+            respText = new String(respText.getBytes(), StandardCharsets.ISO_8859_1);
             out.print(respText);
             out.flush();
             return;
@@ -105,6 +106,9 @@ public class AskController {
     @RequestMapping(value = "/wx", method = RequestMethod.POST)
     public void wechatServicePost(PrintWriter out, HttpServletRequest request, HttpServletResponse response) {
         try {
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+//            response.setContentType("text/html; charset=UTF-8");
             ask(request, response);
         } catch (IOException e) {
             out.print(SUCCESS);
