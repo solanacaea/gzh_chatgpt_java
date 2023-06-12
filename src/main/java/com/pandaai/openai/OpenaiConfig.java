@@ -1,11 +1,7 @@
 package com.pandaai.openai;
-
-import com.unfbx.chatgpt.OpenAiClient;
-import com.unfbx.chatgpt.function.KeyRandomStrategy;
-import com.unfbx.chatgpt.interceptor.OpenAILogger;
-import com.unfbx.chatgpt.interceptor.OpenAiResponseInterceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
+import com.azure.ai.openai.OpenAIClient;
+import com.azure.ai.openai.OpenAIClientBuilder;
+import com.azure.core.credential.AzureKeyCredential;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,15 +15,38 @@ public class OpenaiConfig {
     public static final long timeoutConn = 10;
     public static final long timeout = 30L;
 
-    @Value("${openai.api-key1}")
+//    @Value("${openai.api-key1}")
+//    private String apiKey1;
+//
+//    @Value("${openai.api-key2}")
+//    private String apiKey2;
+//
+//    @Value("${openai.api-key3}")
+//    private String apiKey3;
+
+    @Value("${openai.gpt35.api-key1}")
     private String apiKey1;
 
-    @Value("${openai.api-key2}")
-    private String apiKey2;
+    @Value("${openai.gpt35.endpoint}")
+    private String endpointGpt35;
 
-    @Value("${openai.api-key3}")
-    private String apiKey3;
+    @Bean
+    public OpenAIClient init() {
+        OpenAIClient client = new OpenAIClientBuilder()
+                .endpoint(endpointGpt35)
+                .credential(new AzureKeyCredential(apiKey1))
+//                .configuration(com.azure.core.util.Configuration.getGlobalConfiguration())
+                .buildClient();
+        return client;
+    }
 
+    /*
+import com.unfbx.chatgpt.OpenAiClient;
+import com.unfbx.chatgpt.function.KeyRandomStrategy;
+import com.unfbx.chatgpt.interceptor.OpenAILogger;
+import com.unfbx.chatgpt.interceptor.OpenAiResponseInterceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
     @Bean
     public OpenAiClient init() {
         //国内访问需要做代理，国外服务器不需要
@@ -58,5 +77,7 @@ public class OpenaiConfig {
         return openAiClient;
     }
 
+
+     */
 
 }

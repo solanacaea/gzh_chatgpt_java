@@ -1,11 +1,11 @@
 package com.pandaai.service;
 
-import com.unfbx.chatgpt.OpenAiClient;
-import com.unfbx.chatgpt.entity.chat.ChatChoice;
-import com.unfbx.chatgpt.entity.chat.ChatCompletion;
-import com.unfbx.chatgpt.entity.chat.ChatCompletionResponse;
-import com.unfbx.chatgpt.entity.chat.Message;
+import com.alibaba.fastjson.JSONObject;
+import com.azure.ai.openai.OpenAIClient;
+import com.azure.ai.openai.models.*;
+import com.pandaai.util.UserContextUtils;
 import com.pandaai.wechat.service.WechatService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.pandaai.util.AppConstants.ERROR_RESP_MSG;
 
@@ -22,11 +23,16 @@ public class AskService {
 
     private static final Logger logger = LoggerFactory.getLogger(AskService.class);
 
+    private static Map<String, List<ChatMessage>> USER_CACHE = new ConcurrentHashMap<>();
+
     @Value("${openai.model.chat}")
     private String chatModel;
 
+    @Value("${openai.gpt35.deploymentId}")
+    private String deploymentOrModelId;
+
     @Autowired
-    private OpenAiClient client;
+    private OpenAIClient client;
 
     @Autowired
     private WechatService wxService;
@@ -39,22 +45,34 @@ public class AskService {
         try {
             String q = map.get("Content");
             String from = map.get("FromUserName");
-            Message systemMsg = Message.builder().role(Message.Role.SYSTEM).content(SYSTEM_MESSAGE).build();
-            Message message = Message.builder().role(Message.Role.USER).content(q).build();
-            List<Message> msgList = Arrays.asList(systemMsg, message);
-            ChatCompletion chatCompletion = ChatCompletion.builder()
-                    .maxTokens(maxLength)
-                    .model(chatModel)
-                    .messages(msgList)
-                    .user(from)
-                    .build();
-            ChatCompletionResponse response = client.chatCompletion(chatCompletion);
-            logger.info(response.toString());
+
+            List<ChatMessage> history = UserContextUtils.get(from);
+            if (history == null) {
+                history = new ArrayList<>();
+                history.add(new ChatMessage(ChatRole.SYSTEM).setContent(SYSTEM_MESSAGE));
+                history.add(new ChatMessage(ChatRole.USER).setContent(q));
+                UserContextUtils.put(from, history);
+            } else {
+                history.add(new ChatMessage(ChatRole.USER).setContent(q));
+                int historySize = CollectionUtils.size(history);
+                if (historySize > 5) {
+                    history = history.subList(historySize - 5, historySize);
+                }
+            }
+
+            ChatCompletionsOptions opt = new ChatCompletionsOptions(history);
+            opt.setMaxTokens(maxLength);
+            opt.setModel(chatModel);
+            opt.setN(1);
+
+            ChatCompletions response = client.getChatCompletions(deploymentOrModelId, opt);
+            logger.info(JSONObject.toJSONString(response));
+
             ChatChoice result = response.getChoices().get(0);
-            String respText = result.getMessage().getContent();
-//            long timeCost = (System.currentTimeMillis() / 1000 - response.getCreated());
-            push2User(map, respText);
-            return respText;
+            String resultText = result.getMessage().getContent();
+
+            push2User(map, resultText);
+            return resultText;
         } catch (Exception e) {
             logger.error("ask异常："+ ExceptionUtils.getStackTrace(e));
             return ERROR_RESP_MSG;
